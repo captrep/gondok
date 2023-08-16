@@ -30,7 +30,7 @@ func main() {
 		}
 		json.NewEncoder(w).Encode(resp)
 	})
-	// r.Mount("/api/v1", api.Router())
+	r.Mount("/api/", shortener.Router())
 	log.Info().Msg("Starting up server 127.0.0.1:8000")
 
 	if err := http.ListenAndServe("127.0.0.1:8000", r); err != nil {
