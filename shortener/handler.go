@@ -3,6 +3,8 @@ package shortener
 import (
 	"encoding/json"
 	"net/http"
+
+	"github.com/go-chi/chi/v5"
 )
 
 type J struct {
@@ -47,4 +49,13 @@ func createLink(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 	writeMessage(w, http.StatusCreated, resp, "success")
+}
+
+func redirectLink(w http.ResponseWriter, req *http.Request) {
+	link, err := GetLink(req.Context(), chi.URLParam(req, "url"))
+	if err != nil {
+		http.Redirect(w, req, "/", http.StatusTemporaryRedirect)
+		return
+	}
+	http.Redirect(w, req, link.LongURL, http.StatusFound)
 }

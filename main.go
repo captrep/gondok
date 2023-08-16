@@ -3,7 +3,6 @@ package main
 import (
 	"capt-shortener/shortener"
 	"context"
-	"encoding/json"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -21,16 +20,8 @@ func main() {
 
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
-	r.Get("/health", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("content-type", "application/json")
-		w.WriteHeader(200)
-		resp := map[string]interface{}{
-			"code": 200,
-			"msg":  "Ok",
-		}
-		json.NewEncoder(w).Encode(resp)
-	})
-	r.Mount("/api/", shortener.Router())
+	r.Mount("/", shortener.Router())
+
 	log.Info().Msg("Starting up server 127.0.0.1:8000")
 
 	if err := http.ListenAndServe("127.0.0.1:8000", r); err != nil {
