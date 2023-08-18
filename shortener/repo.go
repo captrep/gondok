@@ -2,6 +2,7 @@ package shortener
 
 import (
 	"context"
+	"time"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/rs/zerolog/log"
@@ -26,4 +27,15 @@ func Find(ctx context.Context, tx pgx.Tx, shortURL string) (Link, error) {
 		return link, err
 	}
 	return link, nil
+}
+
+func SetURL(ctx context.Context, shortURL, longURL string) error {
+	err := Rdb.Set(ctx, shortURL, longURL, time.Hour).Err()
+	return err
+}
+
+func GetURL(ctx context.Context, shortURL string) (string, error) {
+	longURL, err := Rdb.Get(ctx, shortURL).Result()
+	Rdb.Expire(ctx, shortURL, time.Hour)
+	return longURL, err
 }

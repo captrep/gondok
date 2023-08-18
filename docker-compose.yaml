@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  db:
+    container_name: shortener-postgres
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+      
+  redis:
+    container_name: shortener-redis
+    image: redis
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    environment:
+      - PASSWORD=${REDIS_PASSWORD}
+    ports:
+      - 6379:6379
