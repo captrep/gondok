@@ -6,15 +6,28 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/redis/go-redis/v9"
+	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 )
 
 func main() {
+	file, err := os.OpenFile(
+		"log/log.txt",
+		os.O_APPEND|os.O_CREATE|os.O_WRONLY,
+		0664,
+	)
+	if err != nil {
+		log.Error().Err(err).Msg("Unable to create log file")
+	}
+	defer file.Close()
+
+	log.Logger = zerolog.New(file).With().Caller().Timestamp().Logger()
 	dbUrl := fmt.Sprintf("host=%s dbname=%s user=%s password=%s port=%s", util.Conf.DBHost, util.Conf.DBName, util.Conf.DBUser, util.Conf.DBPassword, util.Conf.DBPort)
 	pool, err := pgxpool.New(context.Background(), dbUrl)
 	if err != nil {
