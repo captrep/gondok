@@ -1,4 +1,4 @@
-const base = "http://127.0.0.1:8000";
+const base = window.location.href;
 
 const addUrl = async (e) => {
   const form = document.getElementById("form");
