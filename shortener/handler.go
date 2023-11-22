@@ -2,9 +2,13 @@ package shortener
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"strings"
+	"text/template"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/rs/zerolog/log"
 )
 
 type J struct {
@@ -33,6 +37,32 @@ func writeMessage(w http.ResponseWriter, code int, data interface{}, response st
 
 func writeError(w http.ResponseWriter, code int, err error) {
 	writeMessage(w, code, err.Error(), "error")
+}
+
+func create(w http.ResponseWriter, req *http.Request) {
+
+	longURL := req.FormValue("long")
+	shortURL := req.FormValue("short")
+	resp, err := CreateLink(req.Context(), shortURL, longURL)
+	if err != nil {
+		var errStr string
+		if strings.Contains(err.Error(), "failed") {
+			errStr = "internal server error"
+		} else {
+			errStr = err.Error()
+		}
+		tmpl, err := template.New("t").Parse(fmt.Sprintf("<p class=\"mt-1 mb-5 text-md text-red-500\">%s</p>", errStr))
+		if err != nil {
+			log.Print(err)
+		}
+		tmpl.Execute(w, nil)
+		return
+	}
+	tmpl, err := template.New("t").Parse(fmt.Sprintf(" <p class=\"mt-1 mb-5 text-md font-mono text-indigo-500\">success, here is ur shorten link http://127.0.0.1:8000/%s", resp.ShortURL))
+	if err != nil {
+		log.Print(err)
+	}
+	tmpl.Execute(w, nil)
 }
 
 func createLink(w http.ResponseWriter, req *http.Request) {

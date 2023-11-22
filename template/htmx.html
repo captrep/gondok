@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Shortener</title>
+    <script src="https://unpkg.com/htmx.org@1.9.8" integrity="sha384-rgjA7mptc2ETQqXoYC3/zJvkU7K/aP44Y+z7xQuJiVnB/422P/Ak+F/AqFR7E4Wr" crossorigin="anonymous"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="dark:bg-slate-900">
+    <div class="mt-16 mb-12 text-2xl sm:text-5xl lg:text-5xl font-semibold bg-secondary-focus text-base-content w-full rounded p-4 ">
+        <h1 class="flex flex-col mx-8 sm:mx-12 md:mx-24 lg:mx-28 xl:mx-auto xl:max-w-6xl drop-shadow-lg font-mono text-white">Pendekin</h1>
+    </div>
+    <div class="flex flex-col mx-8 sm:mx-12 md:mx-24 lg:mx-28 xl:mx-auto xl:max-w-6xl text-xl">
+        <form hx-post="/create" hx-target="#target">
+            <div class="mb-4">
+                <label for="long" class="block text-white text-sm mb-2">Long URL</label>
+                <input class="shadow appearance-none rounded bg-slate-950 text-sm w-full py-3 px-3 text-indigo-700 placeholder: opacity-70" type="text" id="long" name="long" placeholder="https://www.twitter.com">
+            </div>
+            <div class="mb-4">
+                <label for="short" class="block text-white text-sm mb-1">Short URL</label>
+                <input class="shadow appearance-none rounded bg-slate-950 text-sm w-full py-3 px-3 text-indigo-700 placeholder: opacity-70" type="text" id="short" name="short" placeholder="twt">
+            </div>
+            <div id="target">
+                
+            </div>
+            <button class="h-10 px-6 rounded-md bg-sky-500 w-full text-white" type="submit">Submit</button>
+        </form>
+    </div>
+    <!-- <div class="flex justify-center min-h-screen items-center bg-white dark:bg-slate-900">
+        <div class="w-full max-w-lg">
+            <div class="px-4 py-6">
+                <h1 class="text-3xl font-mono font-bold mb-1 text-indigo-500">Pendekin</h1>
+            </div>
+            <form hx-post="/create" hx-target="#target">
+                <div class="mb-4">
+                    <label for="long" class="block text-white text-sm mb-2">Long URL</label>
+                    <input class="shadow appearance-none rounded bg-slate-950 text-sm w-full py-3 px-3 text-indigo-700 placeholder: opacity-70" type="text" id="long" name="long" placeholder="https://www.twitter.com">
+                </div>
+                <div class="mb-4">
+                    <label for="short" class="block text-white text-sm mb-1">Short URL</label>
+                    <input class="shadow appearance-none rounded bg-slate-950 text-sm w-full py-3 px-3 text-slate-700 placeholder: opacity-70" type="text" id="short" name="short" placeholder="twt">
+                </div>
+                <div id="target">
+                    
+                </div>
+                <button class="h-10 px-6 font-semibold rounded-md bg-indigo-500 w-full text-white" type="submit">Submit</button>
+            </form>
+        </div>
+    </div> -->
+</body>
+</html>
